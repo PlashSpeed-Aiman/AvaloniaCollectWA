@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="Avalonia.NETCoreMVVMApp1/App.axaml" value="Avalonia.NETCoreMVVMApp1/Avalonia.NETCoreMVVMApp1.csproj" />
+        <entry key="Avalonia.NETCoreMVVMApp1/Components/Card.axaml" value="Avalonia.NETCoreMVVMApp1/Avalonia.NETCoreMVVMApp1.csproj" />
+        <entry key="Avalonia.NETCoreMVVMApp1/Views/MainWindow.axaml" value="Avalonia.NETCoreMVVMApp1/Avalonia.NETCoreMVVMApp1.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

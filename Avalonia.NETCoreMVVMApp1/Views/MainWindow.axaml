@@ -1,0 +1,142 @@
+<reactiveUi:ReactiveWindow x:TypeArguments="vm:MainWindowViewModel" xmlns="https://github.com/avaloniaui"
+                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                           xmlns:vm="using:Avalonia.NETCoreMVVMApp1.ViewModels"
+                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                           xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+                           xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
+                           xmlns:reactiveUi="http://reactiveui.net"
+                           xmlns:converter="clr-namespace:Avalonia.NETCoreMVVMApp1.Converter"
+                           xmlns:drawing="clr-namespace:System.Drawing;assembly=System.Drawing.Common"
+                           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+                           x:Class="Avalonia.NETCoreMVVMApp1.Views.MainWindow"
+                            TransparencyLevelHint="Blur"
+                           Icon="/Assets/avalonia-logo.ico"
+                           Title="CollectWA"
+                           Background="Transparent">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+    <Window.Resources>
+        
+    </Window.Resources>
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="Background" Value="DodgerBlue"/>
+            <Setter Property="FontStyle" Value="Normal"/>
+            <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="FontSize" Value="15"></Setter>
+            <Setter Property="Padding" Value="8"></Setter>
+            <Setter Property="CornerRadius" Value="10"></Setter>
+
+
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="FontStyle" Value="Normal"/>
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="CornerRadius" Value="10"/>
+
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="FontStyle" Value="Normal"/>
+        </Style>
+        
+    </Window.Styles>
+   
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Border Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="4" Background="Teal">
+            <Label Margin="10,0,1,0" FontSize="20" Foreground="White" VerticalContentAlignment="Center" Content="CollectWA Desktop Edition"/>
+        </Border>
+        <Border Grid.RowSpan="2" Background="Aquamarine" />
+        <StackPanel Grid.Row="1" Margin="10" Grid.Column="1" >
+            <Label>Phone Number</Label>
+            <DockPanel HorizontalAlignment="Stretch">
+                <ComboBox Name="ComboBoxNum" Margin="0,0,5,0" CornerRadius="10" SelectedIndex="0" Items="{Binding Strings}" />
+                <TextBox Name="PhoneNumBox" CornerRadius="10" Text="{Binding PhoneNumber,Mode=TwoWay}" />
+            </DockPanel>
+            <Label>Description</Label>
+            <TextBox CornerRadius="10" Text="{Binding Description}" />
+            <Label>Collection</Label>
+            <ComboBox SelectedIndex="0" SelectedItem="{Binding Category}">
+                <ComboBoxItem Content="All" />
+            </ComboBox>
+            <Border ContextMenu="{x:Null}" CornerRadius="10" Margin="10" Background="LightGray" Padding="5">
+                
+               
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <converter:WameConverter x:Key="WameConverter" />
+                    </StackPanel.Resources>
+                    <TextBox CornerRadius="10" IsReadOnly="True"  FontSize="12" Text="{Binding PhoneNumber,Converter={StaticResource WameConverter}}">
+                        
+                    </TextBox>
+                    
+
+                </StackPanel>
+            </Border>
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button  Margin="0,0,5,0" Command="{Binding AddToCollection}" CommandParameter="{Binding ElementName=ComboBoxNum,Path=SelectedItem}">Add</Button>
+                <Button Command="{Binding OpenWhatsApp}" CommandParameter="{Binding ElementName=ComboBoxNum,Path=SelectedItem}">Message</Button>
+            </StackPanel>
+        </StackPanel>
+        <!--  -->
+        <Border Grid.Row="1" Name="Border1" Grid.Column="2" Background="Beige" >
+            
+            <ListBox Background="Transparent"  Name="ListBox" Items="{Binding CollectionEntities}">
+                <ListBox.Styles>
+                    <!-- Give the ListBoxItems a fixed with of 100 and right-align them -->
+                    <Style  Selector="ListBoxItem:pressed /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="#ffdeecf9"/>
+
+                    </Style>
+                    <Style  Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="#deecf9"/>
+
+                    </Style>
+                </ListBox.Styles>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="White" BorderBrush="LightGray" BorderThickness="1" Padding="5" CornerRadius="6">
+                            <StackPanel>
+                                <TextBlock Margin="3" Text="{Binding PhoneNum}" />
+                                <TextBlock Margin="3" Text="{Binding Description}" />
+                                <TextBlock Margin="3" Text="{Binding Category.Category}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        IsEnabled="{Binding Path=IsSelected,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                        CommandParameter="{Binding PhoneNum}"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}},Path=DataContext.ListOpenWhatsApp} ">
+                                        Message
+                                    </Button>
+                                    <Button
+                                        IsEnabled="{Binding Path=IsSelected,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBox}},Path=DataContext.DeleteEntry}" CommandParameter="{Binding ElementName=ListBox,Path=SelectedItem}">
+                                        Delete
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+
+
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+
+
+        </Border>
+    </Grid>
+
+</reactiveUi:ReactiveWindow>
